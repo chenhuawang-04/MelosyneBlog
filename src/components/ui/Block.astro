@@ -1,0 +1,101 @@
+---
+import styles from './block.module.css';
+
+interface Props {
+  id?: string;
+  class?: string;
+  style?: string;
+  dot?: boolean;
+}
+
+const { id, class: className = '', style, dot = true } = Astro.props;
+---
+
+<div id={id} class:list={[styles.block, className]} style={style} data-block-interactive>
+  <div class={styles.noise} aria-hidden="true"></div>
+  <div class={styles.glare} data-block-glare aria-hidden="true"></div>
+  {dot && <div class={styles.dot} aria-hidden="true"></div>}
+  <div class={styles.content}>
+    <slot />
+  </div>
+</div>
+
+<script>
+  import gsap from 'gsap';
+
+  const pointerQuery = window.matchMedia('(pointer: fine)');
+
+  function initInteractiveBlocks() {
+    document.querySelectorAll('[data-block-interactive]').forEach((block) => {
+      if (!(block instanceof HTMLElement) || block.dataset.blockInit === 'true') return;
+      block.dataset.blockInit = 'true';
+
+      if (!pointerQuery.matches) return;
+
+      const glare = block.querySelector('[data-block-glare]');
+      if (!(glare instanceof HTMLElement)) return;
+
+      const onMouseMove = (event) => {
+        const rect = block.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -2;
+        const rotateY = ((x - centerX) / centerX) * 2;
+
+        gsap.to(block, {
+          rotateX,
+          rotateY,
+          transformPerspective: 1000,
+          ease: 'power2.out',
+          duration: 0.6,
+        });
+
+        gsap.to(glare, {
+          x: x - centerX,
+          y: y - centerY,
+          opacity: 1,
+          ease: 'power2.out',
+          duration: 0.6,
+        });
+      };
+
+      const onMouseEnter = () => {
+        gsap.to(block, { duration: 0.4, scale: 1.01, ease: 'power2.out' });
+        gsap.to(glare, { opacity: 1, duration: 0.4 });
+      };
+
+      const onMouseLeave = () => {
+        gsap.to(block, {
+          rotateX: 0,
+          rotateY: 0,
+          scale: 1,
+          ease: 'power2.out',
+          duration: 0.8,
+        });
+        gsap.to(glare, { opacity: 0, duration: 0.8 });
+      };
+
+      const onMouseDown = () => {
+        gsap.to(block, { scale: 0.98, duration: 0.2, ease: 'power2.out' });
+      };
+
+      const onMouseUp = () => {
+        gsap.to(block, { scale: 1.01, duration: 0.4, ease: 'elastic.out(1, 0.5)' });
+      };
+
+      block.addEventListener('mouseenter', onMouseEnter);
+      block.addEventListener('mouseleave', onMouseLeave);
+      block.addEventListener('mousemove', onMouseMove);
+      block.addEventListener('mousedown', onMouseDown);
+      block.addEventListener('mouseup', onMouseUp);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initInteractiveBlocks, { once: true });
+  } else {
+    initInteractiveBlocks();
+  }
+</script>

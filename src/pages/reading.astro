@@ -1,0 +1,125 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Block from '../components/ui/Block.astro';
+import CornerMark from '../components/ui/CornerMark.astro';
+import Icon from '../components/ui/Icon.astro';
+import { BOOKS, READING_PHILOSOPHY } from '../data/site-data';
+import { SITE_TITLE } from '../consts';
+import styles from '../styles/pages/reading.module.css';
+
+const pageTitle = `书单 — ${SITE_TITLE}`;
+const pageDescription = '读过的书、摄录与阅读小记。';
+const reading = BOOKS.filter((book) => book.status === 'Reading');
+const finished = BOOKS.filter((book) => book.status === 'Finished');
+---
+
+<SiteLayout title={pageTitle} description={pageDescription}>
+  <main>
+    <section class={styles.headerRow}>
+      <Block class={styles.headerBlock} style="background: var(--color-navy); color: var(--color-surface);">
+        <div class={styles.headerInner}>
+          <div class={styles.headerTop}>
+            <Icon name="bookmark" size={36} stroke={2.3} />
+            <span class={styles.headerBadge}>{BOOKS.length} books</span>
+          </div>
+          <h1 class={styles.headerTitle}>书单</h1>
+          <p class={styles.headerLead}>不是书评，是小记。一些读过就忘记的，一些改变了我的思考方式的。</p>
+        </div>
+      </Block>
+
+      <div class={styles.headerSidebar}>
+        <Block class={styles.nowReading} style="background: var(--color-primary); color: var(--color-surface);">
+          <CornerMark />
+          <div class={styles.nowReadingInner}>
+            <p class={styles.nowReadingLabel}>Currently reading</p>
+            <span class={styles.nowReadingNum}>{reading.length}</span>
+            <p class={styles.nowReadingBooks}>{reading.map((book) => book.title).join(' / ')}</p>
+          </div>
+        </Block>
+
+        <Block style="background: var(--color-gold);">
+          <div class={styles.finishedInner}>
+            <p class={styles.finishedLabel}>Finished this year</p>
+            <span class={styles.finishedNum}>{finished.length}</span>
+          </div>
+        </Block>
+      </div>
+    </section>
+
+    {reading.length > 0 && (
+      <section class={styles.section}>
+        <div class={styles.sectionHeader}>
+          <span class={styles.sectionDot}></span>
+          <h2 class={styles.sectionTitle}>Now reading</h2>
+        </div>
+        <div class={styles.booksGrid}>
+          {reading.map((book) => (
+            <Block class={styles.bookCard} style={`background:${book.color};color:var(--color-surface);`}>
+              <div class={styles.bookInner}>
+                <div class={styles.bookStatus}>
+                  <span class={styles.bookStatusText}>Reading</span>
+                  {book.rating === null ? (
+                    <span class={styles.ratingNull}>Reading…</span>
+                  ) : (
+                    <span class={styles.stars}>
+                      {Array.from({ length: 5 }).map((_, index) => (
+                        <Icon name={index < book.rating! ? 'star-filled' : 'star'} size={14} stroke={1.8} />
+                      ))}
+                    </span>
+                  )}
+                </div>
+                <div>
+                  <p class={styles.bookCategory}>{book.category}</p>
+                  <h3 class={styles.bookTitle}>{book.title}</h3>
+                  <p class={styles.bookAuthor}>{book.author}</p>
+                </div>
+                <p class={styles.bookNote}>{book.note}</p>
+              </div>
+            </Block>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class={styles.section}>
+      <div class={styles.sectionHeader}>
+        <span class={styles.sectionDotGreen}></span>
+        <h2 class={styles.sectionTitle}>Finished</h2>
+      </div>
+      <div class={styles.finishedGrid}>
+        {finished.map((book) => (
+          <Block class={styles.finishedCard} style="background: var(--color-surface);">
+            <div class={styles.finishedCardInner}>
+              <div class={styles.finishedAccent} style={`background:${book.color};`}></div>
+              <div class={styles.finishedCardBody}>
+                <div class={styles.finishedCardTop}>
+                  <span class={styles.finishedCat}>{book.category}</span>
+                  {book.rating === null ? (
+                    <span class={styles.ratingNull}>Reading…</span>
+                  ) : (
+                    <span class={styles.stars}>
+                      {Array.from({ length: 5 }).map((_, index) => (
+                        <Icon name={index < book.rating! ? 'star-filled' : 'star'} size={14} stroke={1.8} />
+                      ))}
+                    </span>
+                  )}
+                </div>
+                <h3 class={styles.finishedTitle}>{book.title}</h3>
+                <p class={styles.finishedAuthor}>{book.author}</p>
+                <p class={styles.finishedNote}>{book.note}</p>
+              </div>
+            </div>
+          </Block>
+        ))}
+      </div>
+    </section>
+
+    <Block class={styles.readingNote} style="background: var(--color-ink); color: var(--color-surface);">
+      <div class={styles.noteInner}>
+        <p class={styles.noteLabel}>Reading philosophy</p>
+        <blockquote class={styles.noteQuote}>{READING_PHILOSOPHY.quote}</blockquote>
+        <p class={styles.noteText}>{READING_PHILOSOPHY.note}</p>
+      </div>
+    </Block>
+  </main>
+</SiteLayout>

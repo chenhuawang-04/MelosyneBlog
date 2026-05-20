@@ -1,49 +1,217 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Block from '../components/ui/Block.astro';
+import CornerMark from '../components/ui/CornerMark.astro';
+import Icon from '../components/ui/Icon.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { HOME_NOW_TAGS, HOME_STATS, TOPICS } from '../data/site-data';
+import { getPostSummaries } from '../utils/blog';
+import styles from '../styles/pages/home.module.css';
+
+const posts = await getPostSummaries();
+const latestPosts = posts.slice(0, 3);
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+<SiteLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+  <main data-home-reveal-root>
+    <noscript><style>.gsap-reveal{opacity:1 !important;transform:none !important;}</style></noscript>
+    <header class={styles.heroGrid}>
+      <Block class={`gsap-reveal ${styles.heroMain} ${styles.surfaceBlock}`}>
+        <div class={styles.heroInner}>
+          <div class={styles.heroBadgeRow}>
+            <span class={styles.badge}>
+              <Icon name="circle-dot" size={14} stroke={3} /> Since 2026
+            </span>
+            <Icon class={styles.sparkles} name="sparkles" size={34} stroke={2.3} />
+          </div>
+          <h1 class={styles.heroTitle}>Notes with&nbsp;texture.</h1>
+          <p class={styles.heroLead}>
+            一个更安静、更有重量的个人博客。用矿物色块、纸张颜粒、方形网格与克制动效，承载长期笔记、设计观察和正在生长的项目。
+          </p>
+          <div class={styles.heroCta}>
+            <a href="/articles" class={styles.ctaPrimary}>
+              Start reading <Icon name="arrow-up-right" size={18} stroke={2.2} />
+            </a>
+            <a href="/about" class={styles.ctaSecondary}>About</a>
+          </div>
+        </div>
+      </Block>
+
+      <Block class={`gsap-reveal ${styles.heroStats} ${styles.navyBlock}`}>
+        <CornerMark />
+        <div class={styles.statInner}>
+          <Icon name="book" size={34} stroke={2.4} />
+          <div>
+            <p class={styles.statLabel}>Published</p>
+            <div class={styles.statValue}>
+              <span class={styles.statNumber}>{HOME_STATS.publishedNotes}</span>
+              <span class={styles.statUnit}>Notes</span>
+            </div>
+          </div>
+        </div>
+      </Block>
+
+      <Block class={`gsap-reveal ${styles.heroTagline} ${styles.goldBlock}`}>
+        <CornerMark />
+        <div class={styles.taglineInner}>
+          <Icon name="layout-grid" size={36} stroke={2.4} />
+          <div>
+            <p class={styles.taglineLabel}>System</p>
+            <h2 class={styles.taglineText}>Digital garden, slow archive.</h2>
+          </div>
+        </div>
+      </Block>
+
+      <Block class={`gsap-reveal ${styles.heroFeatured} ${styles.inkBlock}`}>
+        <div class={styles.featuredDeco1} aria-hidden="true"></div>
+        <div class={styles.featuredDeco2} aria-hidden="true"></div>
+        <div class={styles.featuredDeco3} aria-hidden="true"></div>
+        <div class={styles.featuredInner}>
+          <p class={styles.featuredLabel}>Featured essay</p>
+          <h2 class={styles.featuredTitle}>让个人博客成为第二大脑入口</h2>
+          <a href="/articles" class={styles.featuredBtn}>
+            Read essay <Icon name="arrow-up-right" size={16} stroke={2.2} />
+          </a>
+        </div>
+      </Block>
+
+      <Block class={`gsap-reveal ${styles.heroIdeas} ${styles.oliveBlock}`}>
+        <div class={styles.ideasInner}>
+          <Icon name="stack-2" size={34} stroke={2.4} />
+          <div>
+            <p class={styles.ideasNumber}>{HOME_STATS.openIdeas}</p>
+            <p class={styles.ideasLabel}>Open ideas</p>
+          </div>
+        </div>
+      </Block>
+    </header>
+
+    <section class={styles.midGrid}>
+      <Block class={`gsap-reveal ${styles.midManifesto} ${styles.primaryBlock}`}>
+        <div class={styles.manifestoInner}>
+          <Icon name="feather" size={38} stroke={2.3} />
+          <div>
+            <p class={styles.manifestoLabel}>Writing rule</p>
+            <h3 class={styles.manifestoQuote}>写作不是输出，是校准。</h3>
+            <p class={styles.manifestoText}>每一篇文章都从一个真实问题开始，而不是从流量关键词开始。</p>
+          </div>
+        </div>
+      </Block>
+
+      <Block id="latest" class={`gsap-reveal ${styles.midPosts} ${styles.surfaceBlock}`}>
+        <div class={styles.postsHeader}>
+          <div>
+            <p class={styles.postsLabel}>Recently published</p>
+            <h2 class={styles.postsTitle}>Latest notes</h2>
+          </div>
+          <span class={styles.postsYear}>2026</span>
+        </div>
+        <div class={styles.postsList}>
+          {latestPosts.map((post) => (
+            <article class={`gsap-reveal ${styles.postCard}`}>
+              <div class={styles.postDate} style={`background:${post.tone.bg};color:${post.tone.text};`}>
+                <span class={styles.postDateText}>{post.shortDate}</span>
+              </div>
+              <div class={styles.postBody}>
+                <div class={styles.postMeta}>
+                  <span>{post.category}</span>
+                  <span class={styles.postReadTime}><Icon name="clock" size={13} stroke={2.2} />{post.read}</span>
+                </div>
+                <h3 class={styles.postCardTitle}>{post.title}</h3>
+                <p class={styles.postExcerpt}>{post.excerpt}</p>
+              </div>
+                      <a href="/articles" class={styles.postArrow}>
+                        <Icon name="arrow-up-right" size={18} stroke={2.8} />
+                      </a>
+            </article>
+          ))}
+        </div>
+      </Block>
+
+      <Block id="about" class={`gsap-reveal ${styles.midNow} ${styles.navyBlock}`}>
+        <div class={styles.nowInner}>
+          <div>
+            <span class={styles.nowBadge}>
+              <Icon name="sparkles" size={14} stroke={2.1} /> Now
+            </span>
+            <h3 class={styles.nowText}>正在构建一个更慢、更准的知识系统。</h3>
+          </div>
+          <div class={styles.nowTags}>
+            {HOME_NOW_TAGS.map((item) => (
+              <span class={styles.nowTag}>{item}</span>
+            ))}
+          </div>
+        </div>
+      </Block>
+    </section>
+
+    <section class={styles.bottomGrid}>
+      <Block class={`gsap-reveal ${styles.bottomTopics} ${styles.inkBlock}`}>
+        <div class={styles.topicsHeader}>
+          <h2 class={styles.topicsTitle}>Topics</h2>
+          <span class={styles.topicsIcon}><Icon name="book" size={20} /></span>
+        </div>
+        <div class={styles.topicsGrid}>
+          {TOPICS.map(([title, caption], index) => (
+            <a href="/articles" class:list={['gsap-reveal', styles.topicCell, index % 3 === 0 ? styles.topicRed : index % 3 === 1 ? styles.topicGold : styles.topicLight]}>
+              <span class={styles.topicNum}>{String(index + 1).padStart(2, '0')}</span>
+              <span class={styles.topicName}>{title}</span>
+              <span class={styles.topicCaption}>{caption}</span>
+            </a>
+          ))}
+        </div>
+      </Block>
+
+      <Block class={`gsap-reveal ${styles.bottomNewsletter} ${styles.goldBlock}`} dot={false}>
+        <div class={styles.newsletterInner}>
+          <div class={styles.newsletterTop}>
+            <Icon name="mail" size={34} stroke={2.3} />
+            <p class={styles.newsletterHeadline}>一封不追热点的慢通讯。</p>
+          </div>
+          <form class={styles.newsletterForm}>
+            <input type="email" placeholder="you@email.com" class={styles.newsletterInput} />
+            <button type="submit" class={styles.newsletterBtn}>
+              Join <Icon name="arrow-up-right" size={16} stroke={2.1} />
+            </button>
+          </form>
+        </div>
+      </Block>
+
+      <Block class={`gsap-reveal ${styles.bottomManifesto} ${styles.surfaceBlock}`}>
+        <div class={styles.bmInner}>
+          <div class={styles.bmHeader}>
+            <span class={styles.bmLabel}>Manifesto</span>
+            <span class={styles.bmNum}>01</span>
+          </div>
+          <div>
+            <h2 class={styles.bmQuote}>清晰，克制，有重量。</h2>
+            <p class={styles.bmText}>
+              这一版减少了纯视觉冲击，转向更耐看的材料感：暖纸底、低饱和矿物色、方形色块、细边框、柔阴影和更宽的呼吸空间。它仍然有识别度，但不再吵。
+            </p>
+          </div>
+        </div>
+      </Block>
+    </section>
+  </main>
+
+  <script>
+    import gsap from 'gsap';
+
+    const root = document.querySelector('[data-home-reveal-root]');
+
+    if (root instanceof HTMLElement) {
+      gsap.fromTo(
+        Array.from(root.querySelectorAll('.gsap-reveal')),
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1.2,
+          stagger: 0.08,
+          ease: 'power3.out',
+          clearProps: 'all',
+        }
+      );
+    }
+  </script>
+</SiteLayout>

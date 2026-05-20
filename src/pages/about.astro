@@ -1,63 +1,127 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Block from '../components/ui/Block.astro';
+import CornerMark from '../components/ui/CornerMark.astro';
+import Icon from '../components/ui/Icon.astro';
+import { SITE_TITLE } from '../consts';
+import { ABOUT_LINKS, ABOUT_NOW_ITEMS, ABOUT_PRINCIPLES, ABOUT_STATS, ABOUT_TIMELINE } from '../data/site-data';
+import styles from '../styles/pages/about.module.css';
+
+const pageTitle = `关于 — ${SITE_TITLE}`;
+const pageDescription = '关于华旺和这个博客的起源。';
 ---
 
-<Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
->
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-	</p>
+<SiteLayout title={pageTitle} description={pageDescription}>
+  <main>
+    <section class={styles.introGrid}>
+      <Block class={styles.identityBlock} style="background: var(--color-ink); color: var(--color-surface);">
+        <CornerMark />
+        <div class={styles.identityInner}>
+          <div class={styles.identityTop}>
+            <span class={styles.identityBadge}>
+              <Icon name="sparkles" size={14} stroke={2.1} /> Open to ideas
+            </span>
+            <div class={styles.avatarGrid}>
+              <div class={styles.avatarSquare}>HW</div>
+              <div class={styles.avatarAccent}></div>
+            </div>
+          </div>
+          <div>
+            <h1 class={styles.identityName}>华旺</h1>
+            <p class={styles.identityRole}>Writer &middot; Designer &middot; Builder</p>
+            <p class={styles.identityBio}>我在注意力很分散的时代，用写作和设计来减速。这个博客是我的个人档案库，也是我思考的公开穿越。</p>
+          </div>
+        </div>
+      </Block>
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
-		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
-		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
-		massa massa ultricies mi.
-	</p>
+      <Block class={styles.principlesBlock} style="background: var(--color-gold);">
+        <div class={styles.principlesInner}>
+          <p class={styles.principlesLabel}>Working principles</p>
+          <ul class={styles.principlesList}>
+            {ABOUT_PRINCIPLES.map((item, index) => (
+              <li class={styles.principlesItem}>
+                <span class={styles.principlesNum}>{String(index + 1).padStart(2, '0')}</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Block>
 
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
-		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
-		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
-		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
-		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
-		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
-		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
-	</p>
+      <Block class={styles.statsBlock} style="background: var(--color-primary); color: var(--color-surface);">
+        <div class={styles.statsInner}>
+          {ABOUT_STATS.map(({ num, label }) => (
+            <div class={styles.statRow}>
+              <span class={styles.statNum}>{num}</span>
+              <span class={styles.statLabel}>{label}</span>
+            </div>
+          ))}
+        </div>
+      </Block>
+    </section>
 
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
-		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
-		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
-		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
-		cursus metus aliquam eleifend mi.
-	</p>
+    <section class={styles.midGrid}>
+      <Block class={styles.nowBlock} style="background: var(--color-surface);">
+        <div class={styles.nowInner}>
+          <div class={styles.nowHeader}>
+            <span class={styles.nowLabel}>Now</span>
+            <span class={styles.nowDot}></span>
+          </div>
+          <h2 class={styles.nowTitle}>目前正在做的事</h2>
+          <ul class={styles.nowList}>
+            {ABOUT_NOW_ITEMS.map((item) => (
+              <li class={styles.nowItem}>
+                <span class={styles.nowItemDot}></span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Block>
 
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
-		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
-		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-	</p>
-</Layout>
+      <Block class={styles.timelineBlock} style="background: var(--color-navy); color: var(--color-surface);">
+        <div class={styles.timelineInner}>
+          <p class={styles.timelineLabel}>Timeline</p>
+          {ABOUT_TIMELINE.map(({ year, event }) => (
+            <div class={styles.timelineItem}>
+              <span class={styles.timelineYear}>{year}</span>
+              <span class={styles.timelineEvent}>{event}</span>
+            </div>
+          ))}
+        </div>
+      </Block>
+    </section>
+
+    <section class={styles.contactGrid}>
+      <Block class={styles.contactBlock} style="background: var(--color-olive); color: var(--color-surface);">
+        <div class={styles.contactInner}>
+          <p class={styles.contactLabel}>Get in touch</p>
+          <h2 class={styles.contactTitle}>来谈谈吧。</h2>
+          <div class={styles.contactLinks}>
+            {ABOUT_LINKS.map(({ label, icon, href }) => (
+              <a href={href} class={styles.contactLink}>
+                <Icon name={icon} size={20} stroke={2} />
+                <span>{label}</span>
+                <Icon name="arrow-up-right" size={16} class={styles.contactArrow} />
+              </a>
+            ))}
+          </div>
+        </div>
+      </Block>
+
+      <Block class={styles.newsletterBlock} style="background: var(--color-surface);">
+        <div class={styles.newsletterInner}>
+          <p class={styles.newsletterLabel}>Slow Letter</p>
+          <h2 class={styles.newsletterTitle}>一封不追热点的慢通讯。</h2>
+          <p class={styles.newsletterDesc}>每周一封，写一个真实问题。不读不罚。</p>
+          <form class={styles.newsletterForm}>
+            <input type="email" placeholder="you@email.com" class={styles.newsletterInput} />
+            <button type="submit" class={styles.newsletterBtn}>
+              Subscribe <Icon name="arrow-up-right" size={16} stroke={2.1} />
+            </button>
+          </form>
+        </div>
+      </Block>
+    </section>
+  </main>
+</SiteLayout>

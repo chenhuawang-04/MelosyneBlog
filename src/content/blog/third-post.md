@@ -2,6 +2,7 @@
 title: 'Third post'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 22 2022'
+draft: true
 heroImage: '../../assets/blog-placeholder-2.jpg'
 ---
 

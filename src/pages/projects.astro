@@ -1,0 +1,91 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Block from '../components/ui/Block.astro';
+import CornerMark from '../components/ui/CornerMark.astro';
+import Icon from '../components/ui/Icon.astro';
+import { PROJECTS } from '../data/site-data';
+import { SITE_TITLE } from '../consts';
+import styles from '../styles/pages/projects.module.css';
+
+const pageTitle = `项目 — ${SITE_TITLE}`;
+const pageDescription = '正在进行中和已完成的个人项目。';
+
+const statusIcon = (status: string) => {
+  switch (status) {
+    case 'Active':
+      return 'bolt';
+    case 'Finished':
+      return 'circle-check';
+    default:
+      return 'clock';
+  }
+};
+---
+
+<SiteLayout title={pageTitle} description={pageDescription}>
+  <main>
+    <section class={styles.heroRow}>
+      <Block class={styles.heroBlock} style="background: var(--color-gold);">
+        <CornerMark />
+        <div class={styles.heroInner}>
+          <div class={styles.heroTop}>
+            <p class={styles.heroLabel}>Selected work</p>
+            <span class={styles.heroBadge}>{PROJECTS.length} projects</span>
+          </div>
+          <h1 class={styles.heroTitle}>正在进行中的项目</h1>
+          <p class={styles.heroLead}>每个项目都是一个真实问题的解答，而不是展示。包含设计、写作和构建。</p>
+        </div>
+      </Block>
+      <Block class={styles.heroAccent} style="background: var(--color-primary); color: var(--color-surface);">
+        <div class={styles.heroAccentInner}>
+          <p class={styles.heroAccentLabel}>Currently active</p>
+          <span class={styles.heroAccentNum}>2</span>
+          <p class={styles.heroAccentSub}>projects in progress</p>
+        </div>
+      </Block>
+    </section>
+
+    <section class={styles.projectsGrid}>
+      {PROJECTS.map((project) => (
+        <Block class={styles.projectCard} style={`background:${project.color};color:${project.textColor};`}>
+          <div class={styles.projectInner}>
+            <div class={styles.projectHeader}>
+              <div class={styles.projectStatus}>
+                <Icon name={statusIcon(project.status)} size={16} stroke={2.4} />
+                <span>{project.status}</span>
+              </div>
+              <span class={styles.projectYear}>{project.year}</span>
+            </div>
+
+            <div class={styles.projectBody}>
+              <h2 class={styles.projectTitle}>{project.title}</h2>
+              <p class={styles.projectSubtitle}>{project.subtitle}</p>
+              <p class={styles.projectDesc}>{project.description}</p>
+            </div>
+
+            <div class={styles.projectFooter}>
+              <div class={styles.projectTags}>
+                {project.tags.map((tag) => <span class={styles.projectTag}>{tag}</span>)}
+              </div>
+              <a href="/projects" class={styles.projectBtn}>
+                View <Icon name="arrow-up-right" size={16} stroke={2.1} />
+              </a>
+            </div>
+          </div>
+        </Block>
+      ))}
+    </section>
+
+    <Block class={styles.ctaStrip} style="background: var(--color-ink); color: var(--color-surface);">
+      <div class={styles.ctaInner}>
+        <div>
+          <p class={styles.ctaLabel}>Have a project in mind?</p>
+          <h2 class={styles.ctaText}>来谈谈吧。</h2>
+        </div>
+        <a href="/about" class={styles.ctaBtn}>
+          Get in touch <Icon name="arrow-up-right" size={18} stroke={2.1} />
+        </a>
+      </div>
+    </Block>
+  </main>
+</SiteLayout>

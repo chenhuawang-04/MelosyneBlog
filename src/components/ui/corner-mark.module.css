@@ -1,0 +1,16 @@
+.mark {
+  position: absolute;
+  right: 1.25rem;
+  top: 1.25rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.375rem;
+  opacity: 0.7;
+}
+
+.dot {
+  display: block;
+  height: 0.75rem;
+  width: 0.75rem;
+  background: currentColor;
+}

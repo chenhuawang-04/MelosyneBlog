@@ -1,0 +1,13 @@
+﻿---
+import styles from './corner-mark.module.css';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class:list={[styles.mark, className]} aria-hidden="true">
+  {Array.from({ length: 4 }).map(() => <span class={styles.dot}></span>)}
+</div>

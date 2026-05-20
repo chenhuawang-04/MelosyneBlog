@@ -1,86 +1,70 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import SiteLayout from './SiteLayout.astro';
+import Block from '../components/ui/Block.astro';
+import Icon from '../components/ui/Icon.astro';
+import { formatLongDate, formatReadableDate } from '../utils/date';
+import styles from './blog-post.module.css';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, category, read } = Astro.props;
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
+<SiteLayout title={title} description={description} image={heroImage}>
+  <article class={styles.article}>
+    {heroImage && (
+      <Block class={styles.heroCard} dot={false}>
+        <div class={styles.heroImageWrap}>
+          <Image src={heroImage} alt={title} class={styles.heroImage} />
+        </div>
+      </Block>
+    )}
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
-</html>
+    <Block class={styles.metaCard}>
+      <div class={styles.metaInner}>
+        <div class={styles.metaTop}>
+          <span class={styles.eyebrow}>
+            <Icon name="book" size={16} stroke={2.2} /> {category ?? 'Archive entry'}
+          </span>
+          <a href="/articles" class={styles.backLink}>
+            Back to archive <Icon name="arrow-up-right" size={14} stroke={2.2} />
+          </a>
+        </div>
+
+        <div>
+          <h1 class={styles.title}>{title}</h1>
+          <p class={styles.description}>{description}</p>
+        </div>
+
+        <div class={styles.metaBottom}>
+          <span class={styles.metaBadge}>
+            <Icon name="clock" size={14} stroke={2.2} />
+            <time datetime={pubDate.toISOString()}>{formatLongDate(pubDate)}</time>
+          </span>
+          {read && <span class={styles.metaBadge}>{read}</span>}
+          <span class={styles.metaBadge}>{formatReadableDate(pubDate)}</span>
+          {updatedDate && <span class={styles.metaBadge}>Updated {formatLongDate(updatedDate)}</span>}
+        </div>
+      </div>
+    </Block>
+
+    <Block class={styles.proseCard}>
+      <div class={styles.proseInner}>
+        <div class={styles.prose}>
+          <slot />
+        </div>
+      </div>
+    </Block>
+
+    <Block class={styles.footerCard}>
+      <div class={styles.footerInner}>
+        <p class={styles.footerText}>继续向下读，也许归档里的下一篇会更接近你此刻的问题。</p>
+        <a href="/articles" class={styles.footerLink}>
+          Browse archive <Icon name="arrow-up-right" size={16} stroke={2.2} />
+        </a>
+      </div>
+    </Block>
+  </article>
+</SiteLayout>

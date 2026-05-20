@@ -1,0 +1,42 @@
+/* ─── Design Tokens ─── */
+:root {
+  /* Palette */
+  --color-bg:        #e8decb;
+  --color-surface:   #fff8eb;
+  --color-ink:       #201c17;
+  --color-ink-muted: #5f594e;
+  --color-ink-faint: #847a6c;
+  --color-border:    rgba(32,28,23,0.18);
+  --color-primary:   #b84a38;
+  --color-navy:      #233f6e;
+  --color-gold:      #d5b46a;
+  --color-olive:     #7c6d32;
+
+  /* Typography */
+  --family-display: 'Playfair Display', Georgia, serif;
+  --family-body:    'DM Sans', system-ui, sans-serif;
+
+  /* Spacing */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+
+  /* Shadows */
+  --shadow-card: 0 4px 24px rgba(32,28,23,0.04), 0 24px 80px rgba(32,28,23,0.12);
+  --shadow-nav:  0 2px 12px rgba(32,28,23,0.03), 0 18px 50px rgba(32,28,23,0.08);
+  
+  /* Transitions */
+  --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Grid-dot texture */
+  --dot-pattern: radial-gradient(#201c17 0.55px, transparent 0.55px);
+  --dot-size: 6px 6px;
+
+  /* Background grid lines */
+  --grid-lines:
+    linear-gradient(to right, rgba(32,28,23,0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(32,28,23,0.055) 1px, transparent 1px);
+  --grid-size: 56px 56px;
+}

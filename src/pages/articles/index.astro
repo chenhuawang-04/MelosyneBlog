@@ -1,0 +1,12 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import ArticleArchive from '../../components/pages/ArticleArchive.astro';
+import { SITE_TITLE } from '../../consts';
+
+const pageTitle = `文章 — ${SITE_TITLE}`;
+const pageDescription = '所有文章、笔记与观察。';
+---
+
+<SiteLayout title={pageTitle} description={pageDescription}>
+  <ArticleArchive />
+</SiteLayout>

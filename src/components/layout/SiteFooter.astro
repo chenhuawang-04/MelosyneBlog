@@ -1,0 +1,13 @@
+---
+import { SITE_FOOTER_LINKS } from '../../data/site-data';
+import styles from './site-footer.module.css';
+---
+
+<footer class={styles.footer}>
+  <p class={styles.copy}>© 2026 Huawang Journal — built slowly.</p>
+  <div class={styles.links}>
+    {SITE_FOOTER_LINKS.map((item) => (
+      <a href={item.href} class={styles.link}>{item.label}</a>
+    ))}
+  </div>
+</footer>

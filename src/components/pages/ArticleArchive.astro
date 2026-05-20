@@ -1,0 +1,123 @@
+---
+import Block from '../ui/Block.astro';
+import Icon from '../ui/Icon.astro';
+import { TOPICS } from '../../data/site-data';
+import { getCategories, getPostSummaries } from '../../utils/blog';
+import styles from '../../styles/pages/articles.module.css';
+
+const posts = await getPostSummaries();
+const categories = getCategories(posts);
+const sinceYear = posts.length > 0 ? posts[posts.length - 1].year : '?';
+---
+
+<main>
+  <section class={styles.pageHeader}>
+    <Block class={`${styles.headerMain} ${styles.inkBlock}`}>
+      <div class={styles.headerInner}>
+        <p class={styles.headerLabel}>Archive — {posts.length} notes</p>
+        <h1 class={styles.headerTitle}>所有文章</h1>
+        <p class={styles.headerLead}>这里是所有公开的笔记、深度文章和设计观察。每一篇都从一个真实问题开始。</p>
+      </div>
+    </Block>
+
+    <Block class={`${styles.headerStats} ${styles.primaryBlock}`}>
+      <div class={styles.statsGrid}>
+        {[
+          { num: String(posts.length), label: 'Articles' },
+          { num: String(categories.length), label: 'Categories' },
+          { num: sinceYear, label: 'Since' },
+        ].map(({ num, label }) => (
+          <div class={styles.statItem}>
+            <span class={styles.statNum}>{num}</span>
+            <span class={styles.statLabel}>{label}</span>
+          </div>
+        ))}
+      </div>
+    </Block>
+  </section>
+
+  <div class={styles.filterBar} data-archive-filter>
+    <span class={styles.filterIcon}><Icon name="filter" size={16} stroke={2.4} /></span>
+    <div class={styles.filterList}>
+      <button type="button" class={styles.filterBtn} data-filter="All" data-active="true">All</button>
+      {categories.map((category) => (
+        <button type="button" class={styles.filterBtn} data-filter={category} data-active="false">{category}</button>
+      ))}
+    </div>
+  </div>
+
+  <section class={styles.articlesGrid} data-archive-grid>
+    {posts.map((post) => (
+      <article class={styles.article} data-category={post.category}>
+        <Block class={styles.articleBlock}>
+          <div class={styles.articleInner}>
+            <div class={styles.articleAccent} style={`background:${post.tone.bg};`}></div>
+            <div class={styles.articleContent}>
+              <div class={styles.articleMeta}>
+                <span class={styles.articleCat} style={`background:${post.tone.bg};color:${post.tone.text};`}>{post.category}</span>
+                <span class={styles.articleDate}>{post.longDate}</span>
+                <span class={styles.articleRead}><Icon name="clock" size={13} stroke={2.2} />{post.read}</span>
+              </div>
+              <h2 class={styles.articleTitle}>{post.title}</h2>
+              <p class={styles.articleExcerpt}>{post.excerpt}</p>
+              <div class={styles.articleFooter}>
+                <div class={styles.articleTags}>
+                  {post.tags.map((tag) => <span class={styles.articleTag}>{tag}</span>)}
+                </div>
+                        <a href="/articles" class={styles.articleBtn}>
+                          Read <Icon name="arrow-up-right" size={16} stroke={2.1} />
+                        </a>
+              </div>
+            </div>
+          </div>
+        </Block>
+      </article>
+    ))}
+  </section>
+
+  <section class={styles.topicsStrip} data-topic-strip>
+    {TOPICS.map(([title, caption], index) => {
+      const filterValue = title === 'Essay' ? 'Essay' : title === 'Notes' ? 'Notes' : title;
+      return (
+        <button
+          type="button"
+          data-filter={filterValue}
+          class:list={[styles.topicBtn, index % 3 === 0 ? styles.topicRed : index % 3 === 1 ? styles.topicGold : styles.topicPlain]}
+        >
+          <span class={styles.topicTitle}>{title}</span>
+          <span class={styles.topicCaption}>{caption}</span>
+        </button>
+      );
+    })}
+  </section>
+</main>
+
+<script is:inline>
+  const filterRoot = document.querySelector('[data-archive-filter]');
+  const topicRoot = document.querySelector('[data-topic-strip]');
+  const cards = Array.from(document.querySelectorAll('[data-archive-grid] > article'));
+
+  if (filterRoot && cards.length > 0) {
+    const buttons = Array.from(filterRoot.querySelectorAll('[data-filter]'));
+    const topicButtons = topicRoot ? Array.from(topicRoot.querySelectorAll('[data-filter]')) : [];
+
+    const update = (value) => {
+      buttons.forEach((button) => {
+        button.setAttribute('data-active', button.getAttribute('data-filter') === value ? 'true' : 'false');
+      });
+
+      cards.forEach((card) => {
+        const category = card.getAttribute('data-category');
+        card.hidden = value !== 'All' && category !== value;
+      });
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => update(button.getAttribute('data-filter') || 'All'));
+    });
+
+    topicButtons.forEach((button) => {
+      button.addEventListener('click', () => update(button.getAttribute('data-filter') || 'All'));
+    });
+  }
+</script>

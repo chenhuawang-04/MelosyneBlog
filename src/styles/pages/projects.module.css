@@ -1,0 +1,275 @@
+/* Hero */
+.heroRow {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .heroRow { grid-template-columns: 8fr 4fr; }
+}
+
+.heroBlock { position: relative; }
+
+.heroInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 260px;
+  padding: 2.5rem;
+}
+
+.heroTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.heroLabel {
+  font-size: 0.6875rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  color: var(--color-ink-muted);
+  font-family: var(--family-body);
+}
+
+.heroBadge {
+  border: 1px solid rgba(32,28,23,0.2);
+  padding: 0.375rem 0.875rem;
+  font-size: 0.6875rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-family: var(--family-body);
+  background: rgba(255,248,235,0.5);
+}
+
+.heroTitle {
+  font-family: var(--family-display);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.07em;
+  color: var(--color-ink);
+}
+
+.heroLead {
+  margin-top: 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.75;
+  color: var(--color-ink-muted);
+  max-width: 36rem;
+}
+
+/* Accent block */
+.heroAccent {}
+
+.heroAccentInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2.5rem;
+  height: 100%;
+  gap: 0.5rem;
+}
+
+.heroAccentLabel {
+  font-size: 0.6875rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  color: #f3c7a9;
+  font-family: var(--family-body);
+}
+
+.heroAccentNum {
+  font-family: var(--family-display);
+  font-size: 6rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.1em;
+}
+
+.heroAccentSub {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #f3c7a9;
+  font-family: var(--family-body);
+}
+
+/* Projects grid */
+.projectsGrid {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 640px) {
+  .projectsGrid { grid-template-columns: 1fr 1fr; }
+}
+
+.projectCard {}
+
+.projectInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 320px;
+  padding: 2rem;
+  gap: 1.5rem;
+}
+
+.projectHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.projectStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(255,248,235,0.25);
+  padding: 0.375rem 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-family: var(--family-body);
+  background: rgba(255,248,235,0.1);
+}
+
+.projectYear {
+  font-size: 0.6875rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  opacity: 0.6;
+  font-family: var(--family-body);
+}
+
+.projectBody { flex-grow: 1; }
+
+.projectTitle {
+  font-family: var(--family-display);
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.projectSubtitle {
+  margin-top: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  opacity: 0.7;
+  font-family: var(--family-body);
+}
+
+.projectDesc {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.75;
+  opacity: 0.85;
+  font-family: var(--family-body);
+}
+
+.projectFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255,248,235,0.15);
+}
+
+.projectTags { display: flex; gap: 0.375rem; flex-wrap: wrap; }
+
+.projectTag {
+  font-size: 0.625rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  border: 1px solid rgba(255,248,235,0.25);
+  padding: 0.2rem 0.5rem;
+  opacity: 0.85;
+  font-family: var(--family-body);
+}
+
+.projectBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: rgba(255,248,235,0.15);
+  border: 1px solid rgba(255,248,235,0.25);
+  color: inherit;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.6875rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-family: var(--family-body);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.projectBtn:hover {
+  transform: translateY(-2px);
+  background: rgba(255,248,235,0.25);
+}
+
+/* CTA strip */
+.ctaStrip {}
+
+.ctaInner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2.5rem;
+}
+
+@media (min-width: 640px) {
+  .ctaInner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.ctaLabel {
+  font-size: 0.6875rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  color: #d7c6a4;
+  font-family: var(--family-body);
+  margin-bottom: 0.5rem;
+}
+
+.ctaText {
+  font-family: var(--family-display);
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.07em;
+}
+
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-gold);
+  color: var(--color-ink);
+  padding: 1rem 1.75rem;
+  font-size: 0.875rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-family: var(--family-body);
+  white-space: nowrap;
+  transition: transform 0.2s;
+}
+
+.ctaBtn:hover { transform: translateY(-2px); }

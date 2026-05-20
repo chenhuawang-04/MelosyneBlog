@@ -1,0 +1,39 @@
+---
+import Icon from '../ui/Icon.astro';
+import { NAV_ITEMS } from '../../data/site-data';
+import { SITE_EYEBROW, SITE_MARK, SITE_NAME } from '../../consts';
+import styles from './site-nav.module.css';
+
+const pathname = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/'
+    ? pathname === '/'
+    : pathname === href || pathname.startsWith(`${href}/`);
+---
+
+<nav class={styles.nav}>
+  <a href="/" class={styles.brand}>
+    <span class={styles.brandMark}>{SITE_MARK}</span>
+    <span class={styles.brandText}>
+      <span class={styles.brandSub}>{SITE_EYEBROW}</span>
+      <span class={styles.brandName}>{SITE_NAME}</span>
+    </span>
+  </a>
+
+  <div class={styles.links}>
+    {NAV_ITEMS.map((item) => (
+      <a href={item.href} class:list={[styles.link, isActive(item.href) && styles.linkActive]}>
+        {item.label}
+      </a>
+    ))}
+  </div>
+
+  <div class={styles.actions}>
+    <button type="button" class={styles.iconBtn} aria-label="Search">
+      <Icon name="search" size={18} stroke={2.6} />
+    </button>
+    <a href="/about" class={styles.subscribeBtn}>
+      Subscribe <Icon name="arrow-up-right" size={15} stroke={2.2} />
+    </a>
+  </div>
+</nav>

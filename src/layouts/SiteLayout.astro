@@ -1,0 +1,33 @@
+﻿---
+import type { ImageMetadata } from 'astro';
+import BaseHead from '../components/BaseHead.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import SiteNav from '../components/layout/SiteNav.astro';
+import styles from '../components/layout/site-layout.module.css';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: ImageMetadata;
+}
+
+const { title, description, image } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead title={title} description={description} image={image} />
+  </head>
+  <body>
+    <div class={styles.layout}>
+      <div class={styles.bgGrid} aria-hidden="true"></div>
+      <div class={styles.bgGlow} aria-hidden="true"></div>
+      <div class={styles.inner}>
+        <SiteNav />
+        <slot />
+        <SiteFooter />
+      </div>
+    </div>
+  </body>
+</html>
