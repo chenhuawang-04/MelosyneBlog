@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { SITE_PATHS } from '../consts';
 import { formatLongDate, formatShortDate } from './date';
 
 export type BlogEntry = CollectionEntry<'blog'>;
@@ -22,6 +23,20 @@ export interface PostSummary {
     text: string;
   };
   featured: boolean;
+}
+
+export interface BlogSnapshot {
+  entries: BlogEntry[];
+  posts: PostSummary[];
+  latestPosts: PostSummary[];
+  featuredPost: PostSummary | null;
+  categories: string[];
+  metrics: {
+    postCount: number;
+    categoryCount: number;
+    oldestYear: string | null;
+    newestYear: string | null;
+  };
 }
 
 const TONES = [
@@ -59,12 +74,24 @@ export async function getSortedPosts() {
   return posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }
 
+export async function getPublishedBlogEntries() {
+  return getSortedPosts();
+}
+
+export function getPostHref(slug: string) {
+  return `${SITE_PATHS.articles}/${slug}/`;
+}
+
+export function getLegacyPostHref(slug: string) {
+  return `${SITE_PATHS.blog}/${slug}/`;
+}
+
 export function toPostSummary(post: BlogEntry, index: number): PostSummary {
   const tone = post.data.tone ?? TONES[index % TONES.length];
   return {
     slug: post.id,
-    href: `/articles/${post.id}/`,
-    legacyHref: `/blog/${post.id}/`,
+    href: getPostHref(post.id),
+    legacyHref: getLegacyPostHref(post.id),
     title: post.data.title,
     description: post.data.description,
     excerpt: post.data.excerpt ?? post.data.description,
@@ -92,4 +119,28 @@ export async function getFeaturedPost() {
 
 export function getCategories(posts: PostSummary[]) {
   return Array.from(new Set(posts.map((post) => post.category)));
+}
+
+export async function getBlogSnapshot(): Promise<BlogSnapshot> {
+  const entries = await getPublishedBlogEntries();
+  const posts = entries.map((post, index) => toPostSummary(post, index));
+  const categories = getCategories(posts);
+  const latestPosts = posts.slice(0, 3);
+  const featuredPost = posts.find((post) => post.featured) ?? posts[0] ?? null;
+  const oldestPost = posts[posts.length - 1] ?? null;
+  const newestPost = posts[0] ?? null;
+
+  return {
+    entries,
+    posts,
+    latestPosts,
+    featuredPost,
+    categories,
+    metrics: {
+      postCount: posts.length,
+      categoryCount: categories.length,
+      oldestYear: oldestPost?.year ?? null,
+      newestYear: newestPost?.year ?? null,
+    },
+  };
 }

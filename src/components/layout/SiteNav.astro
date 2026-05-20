@@ -1,7 +1,7 @@
 ---
 import Icon from '../ui/Icon.astro';
 import { NAV_ITEMS } from '../../data/site-data';
-import { SITE_EYEBROW, SITE_MARK, SITE_NAME } from '../../consts';
+import { SITE_EYEBROW, SITE_MARK, SITE_NAME, SITE_PATHS } from '../../consts';
 import styles from './site-nav.module.css';
 
 const pathname = Astro.url.pathname;
@@ -12,7 +12,7 @@ const isActive = (href: string) =>
 ---
 
 <nav class={styles.nav}>
-  <a href="/" class={styles.brand}>
+  <a href={SITE_PATHS.home} class={styles.brand}>
     <span class={styles.brandMark}>{SITE_MARK}</span>
     <span class={styles.brandText}>
       <span class={styles.brandSub}>{SITE_EYEBROW}</span>
@@ -32,7 +32,7 @@ const isActive = (href: string) =>
     <button type="button" class={styles.iconBtn} aria-label="Search">
       <Icon name="search" size={18} stroke={2.6} />
     </button>
-    <a href="/about" class={styles.subscribeBtn}>
+    <a href={SITE_PATHS.about} class={styles.subscribeBtn}>
       Subscribe <Icon name="arrow-up-right" size={15} stroke={2.2} />
     </a>
   </div>

@@ -1,12 +1,12 @@
 ---
-import { getCollection } from 'astro:content';
+import { getPostHref, getPublishedBlogEntries } from '../../utils/blog';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const posts = await getPublishedBlogEntries();
   return posts.map((post) => ({
     params: { slug: post.id },
     props: {
-      target: `/articles/${post.id}/`,
+      target: getPostHref(post.id),
     },
   }));
 }

@@ -3,12 +3,13 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import Block from '../components/ui/Block.astro';
 import CornerMark from '../components/ui/CornerMark.astro';
 import Icon from '../components/ui/Icon.astro';
-import { PROJECTS } from '../data/site-data';
-import { SITE_TITLE } from '../consts';
+import { SITE_PATHS, SITE_TITLE } from '../consts';
+import { getProjectsPageData } from '../utils/view-models';
 import styles from '../styles/pages/projects.module.css';
 
 const pageTitle = `项目 — ${SITE_TITLE}`;
 const pageDescription = '正在进行中和已完成的个人项目。';
+const { counts, projects } = getProjectsPageData();
 
 const statusIcon = (status: string) => {
   switch (status) {
@@ -30,7 +31,7 @@ const statusIcon = (status: string) => {
         <div class={styles.heroInner}>
           <div class={styles.heroTop}>
             <p class={styles.heroLabel}>Selected work</p>
-            <span class={styles.heroBadge}>{PROJECTS.length} projects</span>
+            <span class={styles.heroBadge}>{counts.total} projects</span>
           </div>
           <h1 class={styles.heroTitle}>正在进行中的项目</h1>
           <p class={styles.heroLead}>每个项目都是一个真实问题的解答，而不是展示。包含设计、写作和构建。</p>
@@ -39,14 +40,14 @@ const statusIcon = (status: string) => {
       <Block class={styles.heroAccent} style="background: var(--color-primary); color: var(--color-surface);">
         <div class={styles.heroAccentInner}>
           <p class={styles.heroAccentLabel}>Currently active</p>
-          <span class={styles.heroAccentNum}>2</span>
+          <span class={styles.heroAccentNum}>{counts.active}</span>
           <p class={styles.heroAccentSub}>projects in progress</p>
         </div>
       </Block>
     </section>
 
     <section class={styles.projectsGrid}>
-      {PROJECTS.map((project) => (
+      {projects.map((project) => (
         <Block class={styles.projectCard} style={`background:${project.color};color:${project.textColor};`}>
           <div class={styles.projectInner}>
             <div class={styles.projectHeader}>
@@ -67,7 +68,7 @@ const statusIcon = (status: string) => {
               <div class={styles.projectTags}>
                 {project.tags.map((tag) => <span class={styles.projectTag}>{tag}</span>)}
               </div>
-              <a href="/projects" class={styles.projectBtn}>
+              <a href={SITE_PATHS.projects} class={styles.projectBtn}>
                 View <Icon name="arrow-up-right" size={16} stroke={2.1} />
               </a>
             </div>
@@ -82,7 +83,7 @@ const statusIcon = (status: string) => {
           <p class={styles.ctaLabel}>Have a project in mind?</p>
           <h2 class={styles.ctaText}>来谈谈吧。</h2>
         </div>
-        <a href="/about" class={styles.ctaBtn}>
+        <a href={SITE_PATHS.about} class={styles.ctaBtn}>
           Get in touch <Icon name="arrow-up-right" size={18} stroke={2.1} />
         </a>
       </div>

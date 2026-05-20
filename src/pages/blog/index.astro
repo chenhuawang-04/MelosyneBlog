@@ -1,5 +1,7 @@
 ---
-const target = '/articles/';
+import { SITE_PATHS } from '../../consts';
+
+const target = `${SITE_PATHS.articles}/`;
 ---
 
 <!doctype html>
@@ -10,8 +12,8 @@ const target = '/articles/';
     <meta name="robots" content="noindex" />
     <link rel="canonical" href={target} />
     <title>Redirecting…</title>
-    <script is:inline>
-      window.location.replace('/articles/');
+    <script is:inline define:vars={{ target }}>
+      window.location.replace(target);
     </script>
   </head>
   <body>

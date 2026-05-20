@@ -1,18 +1,19 @@
+import { SITE_PATHS } from '../consts';
+
 export const NAV_ITEMS = [
-  { label: '文章', href: '/articles' },
-  { label: '项目', href: '/projects' },
-  { label: '书单', href: '/reading' },
-  { label: '关于', href: '/about' },
+  { label: '文章', href: SITE_PATHS.articles },
+  { label: '项目', href: SITE_PATHS.projects },
+  { label: '书单', href: SITE_PATHS.reading },
+  { label: '关于', href: SITE_PATHS.about },
 ];
 
 export const SITE_FOOTER_LINKS = [
-  { label: 'RSS', href: '#' },
+  { label: 'RSS', href: SITE_PATHS.rss },
   { label: 'GitHub', href: '#' },
-  { label: 'Email', href: '#' },
+  { label: 'Email', href: 'mailto:hi@huawang.me' },
 ];
 
 export const HOME_STATS = {
-  publishedNotes: '128',
   openIdeas: '42',
 };
 
@@ -148,7 +149,7 @@ export const ABOUT_TIMELINE = [
 export const ABOUT_LINKS = [
   { label: 'Email', icon: 'mail', href: 'mailto:hi@huawang.me' },
   { label: 'GitHub', icon: 'github', href: '#' },
-  { label: 'RSS', icon: 'rss', href: '#' },
+  { label: 'RSS', icon: 'rss', href: SITE_PATHS.rss },
 ] as const;
 
 export const ABOUT_PRINCIPLES = [
@@ -165,11 +166,9 @@ export const ABOUT_NOW_ITEMS = [
   '研究中英文混排美学',
 ];
 
-export const ABOUT_STATS = [
-  { num: '128', label: 'notes published' },
-  { num: '340+', label: 'newsletter readers' },
-  { num: '4', label: 'years writing online' },
-];
+export const ABOUT_STATS = {
+  newsletterReaders: '340+',
+};
 
 export const READING_PHILOSOPHY = {
   quote: '不为笔记而阅读，就是消费而不是摄入。',

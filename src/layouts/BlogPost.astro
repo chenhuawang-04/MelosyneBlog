@@ -4,6 +4,7 @@ import type { CollectionEntry } from 'astro:content';
 import SiteLayout from './SiteLayout.astro';
 import Block from '../components/ui/Block.astro';
 import Icon from '../components/ui/Icon.astro';
+import { SITE_PATHS } from '../consts';
 import { formatLongDate, formatReadableDate } from '../utils/date';
 import styles from './blog-post.module.css';
 
@@ -28,7 +29,7 @@ const { title, description, pubDate, updatedDate, heroImage, category, read } = 
           <span class={styles.eyebrow}>
             <Icon name="book" size={16} stroke={2.2} /> {category ?? 'Archive entry'}
           </span>
-          <a href="/articles" class={styles.backLink}>
+          <a href={SITE_PATHS.articles} class={styles.backLink}>
             Back to archive <Icon name="arrow-up-right" size={14} stroke={2.2} />
           </a>
         </div>
@@ -61,7 +62,7 @@ const { title, description, pubDate, updatedDate, heroImage, category, read } = 
     <Block class={styles.footerCard}>
       <div class={styles.footerInner}>
         <p class={styles.footerText}>继续向下读，也许归档里的下一篇会更接近你此刻的问题。</p>
-        <a href="/articles" class={styles.footerLink}>
+        <a href={SITE_PATHS.articles} class={styles.footerLink}>
           Browse archive <Icon name="arrow-up-right" size={16} stroke={2.2} />
         </a>
       </div>

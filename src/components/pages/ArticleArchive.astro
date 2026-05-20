@@ -1,20 +1,29 @@
 ---
 import Block from '../ui/Block.astro';
 import Icon from '../ui/Icon.astro';
-import { TOPICS } from '../../data/site-data';
-import { getCategories, getPostSummaries } from '../../utils/blog';
+import type { PostSummary } from '../../utils/blog';
+import type { TopicSummary } from '../../utils/view-models';
 import styles from '../../styles/pages/articles.module.css';
 
-const posts = await getPostSummaries();
-const categories = getCategories(posts);
-const sinceYear = posts.length > 0 ? posts[posts.length - 1].year : '?';
+interface Props {
+  posts: PostSummary[];
+  categories: string[];
+  topics: TopicSummary[];
+  metrics: {
+    postCount: number;
+    categoryCount: number;
+    sinceYear: string;
+  };
+}
+
+const { posts, categories, topics, metrics } = Astro.props;
 ---
 
 <main>
   <section class={styles.pageHeader}>
     <Block class={`${styles.headerMain} ${styles.inkBlock}`}>
       <div class={styles.headerInner}>
-        <p class={styles.headerLabel}>Archive — {posts.length} notes</p>
+        <p class={styles.headerLabel}>Archive — {metrics.postCount} notes</p>
         <h1 class={styles.headerTitle}>所有文章</h1>
         <p class={styles.headerLead}>这里是所有公开的笔记、深度文章和设计观察。每一篇都从一个真实问题开始。</p>
       </div>
@@ -23,9 +32,9 @@ const sinceYear = posts.length > 0 ? posts[posts.length - 1].year : '?';
     <Block class={`${styles.headerStats} ${styles.primaryBlock}`}>
       <div class={styles.statsGrid}>
         {[
-          { num: String(posts.length), label: 'Articles' },
-          { num: String(categories.length), label: 'Categories' },
-          { num: sinceYear, label: 'Since' },
+          { num: String(metrics.postCount), label: 'Articles' },
+          { num: String(metrics.categoryCount), label: 'Categories' },
+          { num: metrics.sinceYear, label: 'Since' },
         ].map(({ num, label }) => (
           <div class={styles.statItem}>
             <span class={styles.statNum}>{num}</span>
@@ -64,9 +73,9 @@ const sinceYear = posts.length > 0 ? posts[posts.length - 1].year : '?';
                 <div class={styles.articleTags}>
                   {post.tags.map((tag) => <span class={styles.articleTag}>{tag}</span>)}
                 </div>
-                        <a href="/articles" class={styles.articleBtn}>
-                          Read <Icon name="arrow-up-right" size={16} stroke={2.1} />
-                        </a>
+                <a href={post.href} class={styles.articleBtn} aria-label={`Read ${post.title}`}>
+                  Read <Icon name="arrow-up-right" size={16} stroke={2.1} />
+                </a>
               </div>
             </div>
           </div>
@@ -76,19 +85,18 @@ const sinceYear = posts.length > 0 ? posts[posts.length - 1].year : '?';
   </section>
 
   <section class={styles.topicsStrip} data-topic-strip>
-    {TOPICS.map(([title, caption], index) => {
-      const filterValue = title === 'Essay' ? 'Essay' : title === 'Notes' ? 'Notes' : title;
-      return (
-        <button
-          type="button"
-          data-filter={filterValue}
-          class:list={[styles.topicBtn, index % 3 === 0 ? styles.topicRed : index % 3 === 1 ? styles.topicGold : styles.topicPlain]}
-        >
-          <span class={styles.topicTitle}>{title}</span>
-          <span class={styles.topicCaption}>{caption}</span>
-        </button>
-      );
-    })}
+    {topics.map((topic, index) => (
+      <button
+        type="button"
+        data-filter={topic.filter ?? 'All'}
+        data-available={topic.isAvailable ? 'true' : 'false'}
+        title={topic.isAvailable ? undefined : '更多内容整理中'}
+        class:list={[styles.topicBtn, index % 3 === 0 ? styles.topicRed : index % 3 === 1 ? styles.topicGold : styles.topicPlain]}
+      >
+        <span class={styles.topicTitle}>{topic.title}</span>
+        <span class={styles.topicCaption}>{topic.caption}</span>
+      </button>
+    ))}
   </section>
 </main>
 
@@ -97,11 +105,28 @@ const sinceYear = posts.length > 0 ? posts[posts.length - 1].year : '?';
   const topicRoot = document.querySelector('[data-topic-strip]');
   const cards = Array.from(document.querySelectorAll('[data-archive-grid] > article'));
 
-  if (filterRoot && cards.length > 0) {
+  if (filterRoot instanceof HTMLElement && cards.length > 0) {
     const buttons = Array.from(filterRoot.querySelectorAll('[data-filter]'));
     const topicButtons = topicRoot ? Array.from(topicRoot.querySelectorAll('[data-filter]')) : [];
+    const availableFilters = new Set(buttons.map((button) => button.getAttribute('data-filter') || 'All'));
 
-    const update = (value) => {
+    const normalizeFilter = (value) => (availableFilters.has(value) ? value : 'All');
+
+    const syncUrl = (value) => {
+      const url = new URL(window.location.href);
+
+      if (value === 'All') {
+        url.searchParams.delete('category');
+      } else {
+        url.searchParams.set('category', value);
+      }
+
+      window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+    };
+
+    const update = (rawValue, { shouldSyncUrl = true } = {}) => {
+      const value = normalizeFilter(rawValue);
+
       buttons.forEach((button) => {
         button.setAttribute('data-active', button.getAttribute('data-filter') === value ? 'true' : 'false');
       });
@@ -110,14 +135,23 @@ const sinceYear = posts.length > 0 ? posts[posts.length - 1].year : '?';
         const category = card.getAttribute('data-category');
         card.hidden = value !== 'All' && category !== value;
       });
+
+      if (shouldSyncUrl) {
+        syncUrl(value);
+      }
     };
 
+    const getFilterValue = (button) => button.getAttribute('data-filter') || 'All';
+
     buttons.forEach((button) => {
-      button.addEventListener('click', () => update(button.getAttribute('data-filter') || 'All'));
+      button.addEventListener('click', () => update(getFilterValue(button)));
     });
 
     topicButtons.forEach((button) => {
-      button.addEventListener('click', () => update(button.getAttribute('data-filter') || 'All'));
+      button.addEventListener('click', () => update(getFilterValue(button)));
     });
+
+    const initialFilter = new URLSearchParams(window.location.search).get('category') || 'All';
+    update(initialFilter, { shouldSyncUrl: false });
   }
 </script>

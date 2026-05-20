@@ -3,13 +3,13 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import Block from '../components/ui/Block.astro';
 import CornerMark from '../components/ui/CornerMark.astro';
 import Icon from '../components/ui/Icon.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { HOME_NOW_TAGS, HOME_STATS, TOPICS } from '../data/site-data';
-import { getPostSummaries } from '../utils/blog';
+import { SITE_DESCRIPTION, SITE_PATHS, SITE_TITLE } from '../consts';
+import { getHomePageData } from '../utils/view-models';
 import styles from '../styles/pages/home.module.css';
 
-const posts = await getPostSummaries();
-const latestPosts = posts.slice(0, 3);
+const { featuredPost, latestPosts, nowTags, stats, topics, years } = await getHomePageData();
+const featuredTitle = featuredPost?.title ?? 'Latest essay';
+const featuredHref = featuredPost?.href ?? SITE_PATHS.articles;
 ---
 
 <SiteLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
@@ -20,7 +20,7 @@ const latestPosts = posts.slice(0, 3);
         <div class={styles.heroInner}>
           <div class={styles.heroBadgeRow}>
             <span class={styles.badge}>
-              <Icon name="circle-dot" size={14} stroke={3} /> Since 2026
+              <Icon name="circle-dot" size={14} stroke={3} /> Since {years.oldest}
             </span>
             <Icon class={styles.sparkles} name="sparkles" size={34} stroke={2.3} />
           </div>
@@ -29,10 +29,10 @@ const latestPosts = posts.slice(0, 3);
             一个更安静、更有重量的个人博客。用矿物色块、纸张颜粒、方形网格与克制动效，承载长期笔记、设计观察和正在生长的项目。
           </p>
           <div class={styles.heroCta}>
-            <a href="/articles" class={styles.ctaPrimary}>
+            <a href={SITE_PATHS.articles} class={styles.ctaPrimary}>
               Start reading <Icon name="arrow-up-right" size={18} stroke={2.2} />
             </a>
-            <a href="/about" class={styles.ctaSecondary}>About</a>
+            <a href={SITE_PATHS.about} class={styles.ctaSecondary}>About</a>
           </div>
         </div>
       </Block>
@@ -44,7 +44,7 @@ const latestPosts = posts.slice(0, 3);
           <div>
             <p class={styles.statLabel}>Published</p>
             <div class={styles.statValue}>
-              <span class={styles.statNumber}>{HOME_STATS.publishedNotes}</span>
+              <span class={styles.statNumber}>{stats.publishedNotes}</span>
               <span class={styles.statUnit}>Notes</span>
             </div>
           </div>
@@ -68,8 +68,8 @@ const latestPosts = posts.slice(0, 3);
         <div class={styles.featuredDeco3} aria-hidden="true"></div>
         <div class={styles.featuredInner}>
           <p class={styles.featuredLabel}>Featured essay</p>
-          <h2 class={styles.featuredTitle}>让个人博客成为第二大脑入口</h2>
-          <a href="/articles" class={styles.featuredBtn}>
+          <h2 class={styles.featuredTitle}>{featuredTitle}</h2>
+          <a href={featuredHref} class={styles.featuredBtn}>
             Read essay <Icon name="arrow-up-right" size={16} stroke={2.2} />
           </a>
         </div>
@@ -79,7 +79,7 @@ const latestPosts = posts.slice(0, 3);
         <div class={styles.ideasInner}>
           <Icon name="stack-2" size={34} stroke={2.4} />
           <div>
-            <p class={styles.ideasNumber}>{HOME_STATS.openIdeas}</p>
+            <p class={styles.ideasNumber}>{stats.openIdeas}</p>
             <p class={styles.ideasLabel}>Open ideas</p>
           </div>
         </div>
@@ -104,7 +104,7 @@ const latestPosts = posts.slice(0, 3);
             <p class={styles.postsLabel}>Recently published</p>
             <h2 class={styles.postsTitle}>Latest notes</h2>
           </div>
-          <span class={styles.postsYear}>2026</span>
+          <span class={styles.postsYear}>{years.newest}</span>
         </div>
         <div class={styles.postsList}>
           {latestPosts.map((post) => (
@@ -120,7 +120,7 @@ const latestPosts = posts.slice(0, 3);
                 <h3 class={styles.postCardTitle}>{post.title}</h3>
                 <p class={styles.postExcerpt}>{post.excerpt}</p>
               </div>
-                      <a href="/articles" class={styles.postArrow}>
+                      <a href={post.href} class={styles.postArrow} aria-label={`Read ${post.title}`}>
                         <Icon name="arrow-up-right" size={18} stroke={2.8} />
                       </a>
             </article>
@@ -137,7 +137,7 @@ const latestPosts = posts.slice(0, 3);
             <h3 class={styles.nowText}>正在构建一个更慢、更准的知识系统。</h3>
           </div>
           <div class={styles.nowTags}>
-            {HOME_NOW_TAGS.map((item) => (
+            {nowTags.map((item) => (
               <span class={styles.nowTag}>{item}</span>
             ))}
           </div>
@@ -152,11 +152,11 @@ const latestPosts = posts.slice(0, 3);
           <span class={styles.topicsIcon}><Icon name="book" size={20} /></span>
         </div>
         <div class={styles.topicsGrid}>
-          {TOPICS.map(([title, caption], index) => (
-            <a href="/articles" class:list={['gsap-reveal', styles.topicCell, index % 3 === 0 ? styles.topicRed : index % 3 === 1 ? styles.topicGold : styles.topicLight]}>
+          {topics.map((topic, index) => (
+            <a href={topic.href} class:list={['gsap-reveal', styles.topicCell, index % 3 === 0 ? styles.topicRed : index % 3 === 1 ? styles.topicGold : styles.topicLight]}>
               <span class={styles.topicNum}>{String(index + 1).padStart(2, '0')}</span>
-              <span class={styles.topicName}>{title}</span>
-              <span class={styles.topicCaption}>{caption}</span>
+              <span class={styles.topicName}>{topic.title}</span>
+              <span class={styles.topicCaption}>{topic.caption}</span>
             </a>
           ))}
         </div>

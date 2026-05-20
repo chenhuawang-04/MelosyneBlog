@@ -4,11 +4,12 @@ import Block from '../components/ui/Block.astro';
 import CornerMark from '../components/ui/CornerMark.astro';
 import Icon from '../components/ui/Icon.astro';
 import { SITE_TITLE } from '../consts';
-import { ABOUT_LINKS, ABOUT_NOW_ITEMS, ABOUT_PRINCIPLES, ABOUT_STATS, ABOUT_TIMELINE } from '../data/site-data';
+import { getAboutPageData } from '../utils/view-models';
 import styles from '../styles/pages/about.module.css';
 
 const pageTitle = `关于 — ${SITE_TITLE}`;
 const pageDescription = '关于华旺和这个博客的起源。';
+const { links, nowItems, principles, stats, timeline } = await getAboutPageData();
 ---
 
 <SiteLayout title={pageTitle} description={pageDescription}>
@@ -38,7 +39,7 @@ const pageDescription = '关于华旺和这个博客的起源。';
         <div class={styles.principlesInner}>
           <p class={styles.principlesLabel}>Working principles</p>
           <ul class={styles.principlesList}>
-            {ABOUT_PRINCIPLES.map((item, index) => (
+            {principles.map((item, index) => (
               <li class={styles.principlesItem}>
                 <span class={styles.principlesNum}>{String(index + 1).padStart(2, '0')}</span>
                 <span>{item}</span>
@@ -50,7 +51,7 @@ const pageDescription = '关于华旺和这个博客的起源。';
 
       <Block class={styles.statsBlock} style="background: var(--color-primary); color: var(--color-surface);">
         <div class={styles.statsInner}>
-          {ABOUT_STATS.map(({ num, label }) => (
+          {stats.map(({ num, label }) => (
             <div class={styles.statRow}>
               <span class={styles.statNum}>{num}</span>
               <span class={styles.statLabel}>{label}</span>
@@ -69,7 +70,7 @@ const pageDescription = '关于华旺和这个博客的起源。';
           </div>
           <h2 class={styles.nowTitle}>目前正在做的事</h2>
           <ul class={styles.nowList}>
-            {ABOUT_NOW_ITEMS.map((item) => (
+            {nowItems.map((item) => (
               <li class={styles.nowItem}>
                 <span class={styles.nowItemDot}></span>
                 {item}
@@ -82,7 +83,7 @@ const pageDescription = '关于华旺和这个博客的起源。';
       <Block class={styles.timelineBlock} style="background: var(--color-navy); color: var(--color-surface);">
         <div class={styles.timelineInner}>
           <p class={styles.timelineLabel}>Timeline</p>
-          {ABOUT_TIMELINE.map(({ year, event }) => (
+          {timeline.map(({ year, event }) => (
             <div class={styles.timelineItem}>
               <span class={styles.timelineYear}>{year}</span>
               <span class={styles.timelineEvent}>{event}</span>
@@ -98,7 +99,7 @@ const pageDescription = '关于华旺和这个博客的起源。';
           <p class={styles.contactLabel}>Get in touch</p>
           <h2 class={styles.contactTitle}>来谈谈吧。</h2>
           <div class={styles.contactLinks}>
-            {ABOUT_LINKS.map(({ label, icon, href }) => (
+            {links.map(({ label, icon, href }) => (
               <a href={href} class={styles.contactLink}>
                 <Icon name={icon} size={20} stroke={2} />
                 <span>{label}</span>

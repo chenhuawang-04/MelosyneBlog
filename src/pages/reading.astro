@@ -3,14 +3,13 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import Block from '../components/ui/Block.astro';
 import CornerMark from '../components/ui/CornerMark.astro';
 import Icon from '../components/ui/Icon.astro';
-import { BOOKS, READING_PHILOSOPHY } from '../data/site-data';
 import { SITE_TITLE } from '../consts';
+import { getReadingPageData } from '../utils/view-models';
 import styles from '../styles/pages/reading.module.css';
 
 const pageTitle = `书单 — ${SITE_TITLE}`;
 const pageDescription = '读过的书、摄录与阅读小记。';
-const reading = BOOKS.filter((book) => book.status === 'Reading');
-const finished = BOOKS.filter((book) => book.status === 'Finished');
+const { counts, finished, philosophy, reading } = getReadingPageData();
 ---
 
 <SiteLayout title={pageTitle} description={pageDescription}>
@@ -20,7 +19,7 @@ const finished = BOOKS.filter((book) => book.status === 'Finished');
         <div class={styles.headerInner}>
           <div class={styles.headerTop}>
             <Icon name="bookmark" size={36} stroke={2.3} />
-            <span class={styles.headerBadge}>{BOOKS.length} books</span>
+            <span class={styles.headerBadge}>{counts.total} books</span>
           </div>
           <h1 class={styles.headerTitle}>书单</h1>
           <p class={styles.headerLead}>不是书评，是小记。一些读过就忘记的，一些改变了我的思考方式的。</p>
@@ -32,7 +31,7 @@ const finished = BOOKS.filter((book) => book.status === 'Finished');
           <CornerMark />
           <div class={styles.nowReadingInner}>
             <p class={styles.nowReadingLabel}>Currently reading</p>
-            <span class={styles.nowReadingNum}>{reading.length}</span>
+            <span class={styles.nowReadingNum}>{counts.reading}</span>
             <p class={styles.nowReadingBooks}>{reading.map((book) => book.title).join(' / ')}</p>
           </div>
         </Block>
@@ -40,7 +39,7 @@ const finished = BOOKS.filter((book) => book.status === 'Finished');
         <Block style="background: var(--color-gold);">
           <div class={styles.finishedInner}>
             <p class={styles.finishedLabel}>Finished this year</p>
-            <span class={styles.finishedNum}>{finished.length}</span>
+            <span class={styles.finishedNum}>{counts.finishedThisYear}</span>
           </div>
         </Block>
       </div>
@@ -117,8 +116,8 @@ const finished = BOOKS.filter((book) => book.status === 'Finished');
     <Block class={styles.readingNote} style="background: var(--color-ink); color: var(--color-surface);">
       <div class={styles.noteInner}>
         <p class={styles.noteLabel}>Reading philosophy</p>
-        <blockquote class={styles.noteQuote}>{READING_PHILOSOPHY.quote}</blockquote>
-        <p class={styles.noteText}>{READING_PHILOSOPHY.note}</p>
+        <blockquote class={styles.noteQuote}>{philosophy.quote}</blockquote>
+        <p class={styles.noteText}>{philosophy.note}</p>
       </div>
     </Block>
   </main>

@@ -2,11 +2,13 @@
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import ArticleArchive from '../../components/pages/ArticleArchive.astro';
 import { SITE_TITLE } from '../../consts';
+import { getArchivePageData } from '../../utils/view-models';
 
 const pageTitle = `文章 — ${SITE_TITLE}`;
 const pageDescription = '所有文章、笔记与观察。';
+const archivePageData = await getArchivePageData();
 ---
 
 <SiteLayout title={pageTitle} description={pageDescription}>
-  <ArticleArchive />
+  <ArticleArchive {...archivePageData} />
 </SiteLayout>
