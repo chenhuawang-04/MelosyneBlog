@@ -6,12 +6,18 @@ interface Props {
   class?: string;
   style?: string;
   dot?: boolean;
+  interactive?: boolean;
 }
 
-const { id, class: className = '', style, dot = true } = Astro.props;
+const { id, class: className = '', style, dot = true, interactive = true } = Astro.props;
 ---
 
-<div id={id} class:list={[styles.block, className]} style={style} data-block-interactive>
+<div
+  id={id}
+  class:list={[styles.block, className]}
+  style={style}
+  data-block-interactive={interactive ? '' : undefined}
+>
   <div class={styles.noise} aria-hidden="true"></div>
   <div class={styles.glare} data-block-glare aria-hidden="true"></div>
   {dot && <div class={styles.dot} aria-hidden="true"></div>}
@@ -24,13 +30,18 @@ const { id, class: className = '', style, dot = true } = Astro.props;
   import gsap from 'gsap';
 
   const pointerQuery = window.matchMedia('(pointer: fine)');
+  const readingBlockSelector = '[data-reading-block], [data-blog-prose]';
+
+  function shouldSkipInteractiveBlock(block) {
+    return block.matches(readingBlockSelector) || block.querySelector(readingBlockSelector) !== null;
+  }
 
   function initInteractiveBlocks() {
     document.querySelectorAll('[data-block-interactive]').forEach((block) => {
       if (!(block instanceof HTMLElement) || block.dataset.blockInit === 'true') return;
       block.dataset.blockInit = 'true';
 
-      if (!pointerQuery.matches) return;
+      if (!pointerQuery.matches || shouldSkipInteractiveBlock(block)) return;
 
       const glare = block.querySelector('[data-block-glare]');
       if (!(glare instanceof HTMLElement)) return;

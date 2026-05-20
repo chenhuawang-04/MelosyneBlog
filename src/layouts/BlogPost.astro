@@ -51,9 +51,9 @@ const { title, description, pubDate, updatedDate, heroImage, category, read } = 
       </div>
     </Block>
 
-    <Block class={styles.proseCard}>
+    <Block class={styles.proseCard} interactive={false}>
       <div class={styles.proseInner}>
-        <div class={styles.prose}>
+        <div class={styles.prose} data-blog-prose data-reading-block>
           <slot />
         </div>
       </div>
